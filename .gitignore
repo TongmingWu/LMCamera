@@ -1,0 +1,14 @@
+gradle
+.gradle/
+.idea/
+build/
+.settings/
+*.iml
+local.properties
+settings.gradle
+gradle/*
+link
+/class_files.txt
+/mapping.txt
+/seeds.txt
+/unused.txt
