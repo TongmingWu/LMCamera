@@ -60,9 +60,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cvContent.releaseCamera();
+        cvContent.stopBackgroundThread();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        cvContent.releaseCamera();
     }
 
 }

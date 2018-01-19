@@ -176,6 +176,12 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback2 {
         }
     }
 
+    public void stopBackgroundThread() {
+        if (mHandlerThread != null) {
+            mHandlerThread.quitSafely();
+        }
+    }
+
     public void releaseCamera() {
         if (mCameraDevice != null) {
             mCameraDevice.close();
