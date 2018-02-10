@@ -5,7 +5,6 @@ build/
 .settings/
 *.iml
 local.properties
-settings.gradle
 gradle/*
 link
 /class_files.txt

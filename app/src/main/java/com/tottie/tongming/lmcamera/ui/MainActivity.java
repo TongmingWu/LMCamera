@@ -7,6 +7,7 @@ import android.view.View;
 import com.tottie.tongming.lmcamera.R;
 import com.tottie.tongming.lmcamera.base.BaseActivity;
 import com.tottie.tongming.lmcamera.camera.CameraView;
+import com.tottie.tongming.lmcamera.utils.GLUtils;
 import com.tottie.tongming.lmcamera.utils.PermissionUtils;
 import com.tottie.tongming.lmcamera.utils.ToastHelper;
 
@@ -42,7 +43,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
-
+        if(!GLUtils.supportGlEs20()){
+            ToastHelper.toast("不支持");
+            finish();
+            return;
+        }
     }
 
     @Override

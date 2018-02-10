@@ -10,6 +10,10 @@ import android.hardware.camera2.CameraMetadata;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import com.tottie.tongming.lmcamera.LMApplication;
 import com.tottie.tongming.lmcamera.utils.PermissionUtils;
@@ -21,6 +25,7 @@ import com.tottie.tongming.lmcamera.utils.ToastHelper;
 
 public class CameraHelper {
 
+    private static final String TAG = CameraHelper.class.getSimpleName();
     private static CameraHelper instance;
     private final CameraManager cameraManager;
 
@@ -76,6 +81,61 @@ public class CameraHelper {
             e.printStackTrace();
             ToastHelper.toast("开启相机异常");
         }
+    }
+
+    public boolean checkHardwareSupportLevel(String cameraId) {
+        boolean result = false;
+        int level = getHardwareSupportLevel(cameraId);
+        switch (level) {
+            case CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED:
+                result = true;
+                break;
+            case CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_FULL:
+                result = true;
+                break;
+            case CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY:
+                result = true;
+                break;
+            case CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_3:
+                result = false;
+                break;
+        }
+        Log.d(TAG, "checkHardwareSupportLevel: level = " + level);
+        return result;
+    }
+
+    private int getHardwareSupportLevel(String cameraId) {
+        try {
+            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+            Integer level = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL);
+            return level == null ? 0 : level;
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getDisplayOrientation() {
+        WindowManager windowManager = (WindowManager) LMApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+        if (windowManager == null) {
+            return 0;
+        }
+        Display display = windowManager.getDefaultDisplay();
+        int rotation = display.getRotation();
+        int degress = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degress = 0;
+                break;
+            case Surface.ROTATION_90:
+                degress = 90;
+            case Surface.ROTATION_180:
+                degress = 180;
+            case Surface.ROTATION_270:
+                degress = 270;
+        }
+        // TODO: 2018/1/20 需修改
+        return 0;
     }
 
     public void releaseCamera() {
